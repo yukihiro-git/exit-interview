@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>離脱ユーザー向け ヒアリング | ND Software</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Serif+Display&display=swap');
+
+  :root {
+    --ink: #1a1a2e;
+    --ink-light: #3d3d5c;
+    --ink-muted: #6b6b8a;
+    --paper: #fafaf8;
+    --paper-warm: #f5f3ee;
+    --accent: #2d6a4f;
+    --accent-light: #52b788;
+    --accent-pale: #d8f3dc;
+    --gold: #b5891a;
+    --gold-light: #f0c040;
+    --border: #e0ddd6;
+    --border-strong: #b8b4aa;
+    --shadow: 0 4px 24px rgba(26,26,46,0.08);
+    --shadow-lg: 0 8px 48px rgba(26,26,46,0.12);
+    --radius: 12px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    background: var(--ink);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    color: white;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+  }
+  .logo span { color: var(--gold-light); }
+  .header-badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.8);
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-wrap {
+    background: var(--paper-warm);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 40px;
+    position: sticky;
+    top: 68px;
+    z-index: 90;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .progress-meta strong { color: var(--ink-light); font-size: 13px; }
+  .progress-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+  .steps-nav {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border-strong);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .step-dot.done { background: var(--accent-light); }
+  .step-dot.active { background: var(--accent); transform: scale(1.4); }
+
+  /* ─── MAIN LAYOUT ─── */
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── WELCOME SCREEN ─── */
+  #welcome-screen {
+    padding: 60px 0 40px;
+    text-align: center;
+    animation: fadeInUp 0.6s ease;
+  }
+  .welcome-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--ink), var(--ink-light));
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 28px;
+    font-size: 32px;
+    box-shadow: var(--shadow);
+  }
+  .welcome-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .welcome-sub {
+    font-size: 14px;
+    color: var(--ink-muted);
+    margin-bottom: 32px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .purpose-box {
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    text-align: left;
+    margin-bottom: 32px;
+  }
+  .purpose-box p {
+    font-size: 14px;
+    color: var(--ink-light);
+    margin-bottom: 10px;
+  }
+  .purpose-box p:last-child { margin-bottom: 0; }
+  .purpose-box strong { color: var(--accent); }
+  .start-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 16px 40px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: var(--shadow);
+  }
+  .start-btn:hover {
+    background: var(--ink-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .start-btn svg { transition: transform 0.2s; }
+  .start-btn:hover svg { transform: translateX(4px); }
+  .time-note {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  /* ─── SECTION ─── */
+  .section-card {
+    display: none;
+    animation: fadeInUp 0.45s ease;
+  }
+  .section-card.active { display: block; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    padding: 36px 0 20px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ink);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .section-number { color: var(--gold-light); }
+  .section-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  /* ─── QUESTION BLOCKS ─── */
+  .question-block {
+    margin-bottom: 24px;
+  }
+  .question-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .question-label .q-num {
+    background: var(--accent-pale);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .question-hint {
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+    padding-left: 32px;
+    font-style: italic;
+  }
+
+  textarea, input[type="text"], input[type="number"], select {
+    width: 100%;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    resize: vertical;
+  }
+  textarea:focus, input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(45,106,79,0.1);
+  }
+  textarea { min-height: 90px; }
+
+  /* ─── RADIO / CHECKBOX ─── */
+  .choice-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .choice-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    font-size: 13px;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+  .choice-label:hover {
+    border-color: var(--accent-light);
+    background: var(--accent-pale);
+  }
+  .choice-label.selected {
+    border-color: var(--accent);
+    background: var(--accent-pale);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .choice-label input { display: none; }
+  .choice-check {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border-strong);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+  .choice-label.selected .choice-check {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .choice-check::after {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: white;
+    display: none;
+  }
+  .choice-label.selected .choice-check::after { display: block; }
+  .choice-check-sq {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border-strong);
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+  .choice-label.selected .choice-check-sq {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .choice-check-sq::after {
+    content: '✓';
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    display: none;
+  }
+  .choice-label.selected .choice-check-sq::after { display: block; }
+
+  /* ─── SCALE ─── */
+  .scale-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .scale-track {
+    display: flex;
+    gap: 6px;
+  }
+  .scale-btn {
+    flex: 1;
+    padding: 10px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: white;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .scale-btn:hover { border-color: var(--accent-light); color: var(--accent); }
+  .scale-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--ink-muted);
+    padding: 0 2px;
+  }
+
+  /* ─── DEEPDIVE BOX ─── */
+  .deepdive-box {
+    background: linear-gradient(135deg, #fff8e7, #fffcf3);
+    border: 1px solid #e8d58a;
+    border-left: 4px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .deepdive-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .deepdive-items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .deepdive-item {
+    font-size: 13px;
+    color: var(--ink-light);
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 6px;
+    border: 1px solid rgba(181,137,26,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .deepdive-item:hover {
+    background: white;
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+  .deepdive-item::before {
+    content: '→';
+    color: var(--gold);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ─── NAVIGATION ─── */
+  .nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
+  }
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1.5px solid var(--border-strong);
+    color: var(--ink-light);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-back:hover {
+    background: var(--paper-warm);
+    border-color: var(--ink-light);
+  }
+  .btn-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink);
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 2px 8px rgba(26,26,46,0.15);
+  }
+  .btn-next:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+  .btn-submit {
+    background: var(--accent);
+  }
+  .btn-submit:hover {
+    background: var(--ink);
+  }
+  .btn-skip {
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 8px 12px;
+    text-decoration: underline;
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: color 0.2s;
+  }
+  .btn-skip:hover { color: var(--ink-light); }
+
+  /* ─── THANK YOU ─── */
+  #thankyou-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 0;
+    animation: fadeInUp 0.6s ease;
+  }
+  .ty-icon {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 28px;
+    font-size: 36px;
+    box-shadow: 0 8px 32px rgba(45,106,79,0.25);
+    animation: popIn 0.5s cubic-bezier(0.4,0,0.2,1) 0.3s both;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  .ty-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .ty-message {
+    font-size: 14px;
+    color: var(--ink-muted);
+    max-width: 480px;
+    margin: 0 auto 32px;
+    line-height: 1.8;
+  }
+  .ty-summary {
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    text-align: left;
+    max-width: 520px;
+    margin: 0 auto 28px;
+  }
+  .ty-summary h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-light);
+    margin-bottom: 14px;
+    letter-spacing: 0.06em;
+  }
+  .ty-entry {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .ty-entry:last-child { border-bottom: none; }
+  .ty-entry-label {
+    color: var(--ink-muted);
+    flex-shrink: 0;
+    width: 140px;
+  }
+  .ty-entry-value { color: var(--ink-light); font-weight: 500; }
+
+  /* ─── OPTIONAL BADGE ─── */
+  .optional-badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    background: var(--border);
+    padding: 2px 7px;
+    border-radius: 8px;
+    letter-spacing: 0.04em;
+  }
+  .required-badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: #c0392b;
+    background: #fdecea;
+    padding: 2px 7px;
+    border-radius: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  /* ─── GRID INPUTS ─── */
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 560px) {
+    .input-row { grid-template-columns: 1fr; }
+    .site-header { padding: 16px 20px; }
+    .progress-wrap { padding: 12px 20px; }
+    .container { padding: 0 16px 60px; }
+  }
+
+  /* ─── TOOLTIP ─── */
+  .tooltip-wrap { position: relative; display: inline-block; margin-left: 6px; }
+  .tooltip-icon {
+    width: 16px; height: 16px;
+    background: var(--border-strong);
+    color: var(--ink-muted);
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: help;
+    vertical-align: middle;
+  }
+  .tooltip-text {
+    display: none;
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    bottom: 24px;
+    background: var(--ink);
+    color: white;
+    font-size: 11px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    width: 220px;
+    line-height: 1.5;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .tooltip-wrap:hover .tooltip-text { display: block; }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b8a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">ND <span>Software</span></div>
+  <div class="header-badge">Customer Exit Interview</div>
+</header>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" id="progress-area" style="display:none">
+  <div class="progress-meta">
+    <strong id="section-label">セクション 1 / 8</strong>
+    <span id="pct-label">0%</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+  <div class="steps-nav" id="steps-nav"></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- ── WELCOME ── -->
+  <div id="welcome-screen">
+    <div class="welcome-icon">📋</div>
+    <h1 class="welcome-title">離脱ユーザー向け<br>ヒアリングフォーム</h1>
+    <p class="welcome-sub">貴重なご意見をいただき、今後のサービス改善に活かしてまいります。<br>率直なご回答をお待ちしております。</p>
+    <div class="purpose-box">
+      <p>🎯 <strong>このヒアリングについて</strong></p>
+      <p>本アンケートは、御社の判断を尊重した上で、今後の改善のために率直なご意見を伺うことが目的です。</p>
+      <p>営業ではなく、あくまで学びの機会としてお話を伺いたいと考えています。いただいた内容は社内の改善活動にのみ活用されます。</p>
+    </div>
+    <button class="start-btn" onclick="startInterview()">
+      ヒアリングを開始する
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="time-note">
+      ⏱ 所要時間：約15〜25分
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: 事業所情報 ── -->
+  <div class="section-card" id="section-1">
+    <div class="section-header">
+      <div class="section-tag"><span class="section-number">01</span> 事業所情報</div>
+      <h2 class="section-title">事業所の状況・業務フローの把握</h2>
+      <p class="section-desc">貴事業所の基本情報をお聞かせください。</p>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label">
+        <span class="q-num">Q1</span>
+        事業所の利用者数を教えてください。
+        <span class="required-badge">必須</span>
+      </div>
+      <div class="choice-group" id="q1-group">
+        <label class="choice-label" onclick="selectRadio(this,'q1')"><input type="radio" name="q1" value="20名未満"><div class="choice-check"></div>20名未満</label>
+        <label class="choice-label" onclick="selectRadio(this,'q1')"><input type="radio" name="q1" value="20〜49名"><div class="choice-check"></div>20〜49名</label>
+        <label class="choice-label" onclick="selectRadio(this,'q1')"><input type="radio" name="q1" value="50〜99名"><div class="choice-check"></div>50〜99名</label>
+        <label class="choice-label" onclick="selectRadio(this,'q1')"><input type="radio" name="q1" value="100名以上"><div class="choice-check"></div>100名以上</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q2</span>職員数を教えてください。<span class="required-badge">必須</span></div>
+      <div class="choice-group" id="q2-group">
+        <label class="choice-label" onclick="selectRadio(this,'q2')"><input type="radio" name="q2" value="10名未満"><div class="choice-check"></div>10名未満</label>
+        <label class="choice-label" onclick="selectRadio(this,'q2')"><input type="radio" name="q2" value="10〜29名"><div class="choice-check"></div>10〜29名</label>
+        <label class="choice-label" onclick="selectRadio(this,'q2')"><input type="radio" name="q2" value="30〜49名"><div class="choice-check"></div>30〜49名</label>
+        <label class="choice-label" onclick="selectRadio(this,'q2')"><input type="radio" name="q2" value="50名以上"><div class="choice-check"></div>50名以上</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q3</span>主にご利用いただいていた機能領域（複数選択可）<span class="optional-badge">任意</span></div>
+      <div class="choice-group" id="q3-group">
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q3" value="記録管理"><div class="choice-check-sq"></div>記録管理</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q3" value="請求・加算管理"><div class="choice-check-sq"></div>請求・加算管理</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q3" value="勤怠管理"><div class="choice-check-sq"></div>勤怠管理</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q3" value="送迎管理"><div class="choice-check-sq"></div>送迎管理</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q3" value="ケアプラン管理"><div class="choice-check-sq"></div>ケアプラン管理</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q3" value="その他"><div class="choice-check-sq"></div>その他</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q4</span>日々の業務で特に負荷が高かった業務は何ですか？<span class="optional-badge">任意</span></div>
+      <div class="question-hint">具体的に教えていただけると、改善に役立てられます。</div>
+      <textarea name="q4" placeholder="例：月末の請求処理、介護記録の入力、加算要件の確認など…"></textarea>
+    </div>
+
+    <div class="nav-bar">
+      <span></span>
+      <button class="btn-next" onclick="goTo(2)">次へ <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: 乗り換え経緯 ── -->
+  <div class="section-card" id="section-2">
+    <div class="section-header">
+      <div class="section-tag"><span class="section-number">02</span> 検討経緯</div>
+      <h2 class="section-title">リプレイス検討の経緯</h2>
+      <p class="section-desc">乗り換えをご検討されたきっかけをお聞かせください。</p>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q5</span>乗り換えの検討を始めた時期はいつ頃ですか？<span class="required-badge">必須</span></div>
+      <div class="choice-group" id="q5-group">
+        <label class="choice-label" onclick="selectRadio(this,'q5')"><input type="radio" name="q5" value="3ヶ月以内"><div class="choice-check"></div>3ヶ月以内</label>
+        <label class="choice-label" onclick="selectRadio(this,'q5')"><input type="radio" name="q5" value="3〜6ヶ月前"><div class="choice-check"></div>3〜6ヶ月前</label>
+        <label class="choice-label" onclick="selectRadio(this,'q5')"><input type="radio" name="q5" value="6ヶ月〜1年前"><div class="choice-check"></div>6ヶ月〜1年前</label>
+        <label class="choice-label" onclick="selectRadio(this,'q5')"><input type="radio" name="q5" value="1年以上前から"><div class="choice-check"></div>1年以上前から</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q6</span>乗り換えのきっかけとなった出来事を教えてください。<span class="required-badge">必須</span></div>
+      <div class="question-hint">具体的なトラブル、業務変化、担当者変更など何でも構いません。</div>
+      <textarea name="q6" placeholder="例：請求エラーが続発した、担当者が退職した、法改正対応が遅れた など…" style="min-height:100px"></textarea>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q7</span>意思決定の主導者はどなたでしたか？<span class="optional-badge">任意</span></div>
+      <div class="choice-group" id="q7-group">
+        <label class="choice-label" onclick="selectRadio(this,'q7')"><input type="radio" name="q7" value="管理者・施設長"><div class="choice-check"></div>管理者・施設長</label>
+        <label class="choice-label" onclick="selectRadio(this,'q7')"><input type="radio" name="q7" value="事務担当者"><div class="choice-check"></div>事務担当者</label>
+        <label class="choice-label" onclick="selectRadio(this,'q7')"><input type="radio" name="q7" value="現場スタッフ主導"><div class="choice-check"></div>現場スタッフ主導</label>
+        <label class="choice-label" onclick="selectRadio(this,'q7')"><input type="radio" name="q7" value="法人本部の判断"><div class="choice-check"></div>法人本部の判断</label>
+        <label class="choice-label" onclick="selectRadio(this,'q7')"><input type="radio" name="q7" value="複数名で検討"><div class="choice-check"></div>複数名で検討</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q8</span>最終的な乗り換え決定の決め手は何でしたか？<span class="optional-badge">任意</span></div>
+      <textarea name="q8" placeholder="例：価格、機能の充実度、操作のしやすさ、サポート体制 など…"></textarea>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goTo(1)">← 戻る</button>
+      <button class="btn-next" onclick="goTo(3)">次へ <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: 不満の深掘り ── -->
+  <div class="section-card" id="section-3">
+    <div class="section-header">
+      <div class="section-tag"><span class="section-number">03</span> 課題の深掘り（最重要）</div>
+      <h2 class="section-title">当社システムへの不満・課題</h2>
+      <p class="section-desc">表面的な理由から本音・感情・具体例・影響度・優先順位へと段階的にお聞きします。</p>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q9</span>当社システムで「困っていた点」は何ですか？<span class="required-badge">必須</span></div>
+      <div class="question-hint">どの機能・場面で使いづらさを感じたか、具体的に教えてください。</div>
+      <textarea name="q9" style="min-height:110px" placeholder="例：請求処理が複雑で時間がかかる、画面の動作が遅い、特定の加算が対応していない など…"></textarea>
+    </div>
+
+    <div class="deepdive-box">
+      <div class="deepdive-label">🔍 深掘りのヒント（気になった項目をクリックすると追記欄が開きます）</div>
+      <div class="deepdive-items">
+        <div class="deepdive-item" onclick="openDeep('deep-a')">その不満はいつ頃から感じていましたか？それとも最近強くなりましたか？</div>
+        <div class="deepdive-item" onclick="openDeep('deep-b')">現場のスタッフはどう感じていましたか？</div>
+        <div class="deepdive-item" onclick="openDeep('deep-c')">その問題はどれくらいの頻度で発生しましたか？業務への影響は？</div>
+        <div class="deepdive-item" onclick="openDeep('deep-d')">もしその問題が解決していたら、状況は変わっていましたか？</div>
+      </div>
+    </div>
+    <div id="deep-a" style="display:none; margin-bottom:16px">
+      <div class="question-label"><span class="q-num">追加</span>不満の変化について</div>
+      <textarea name="deep_a" placeholder="以前から感じていた・最近強くなった・特定のタイミングから など…"></textarea>
+    </div>
+    <div id="deep-b" style="display:none; margin-bottom:16px">
+      <div class="question-label"><span class="q-num">追加</span>現場スタッフの声について</div>
+      <textarea name="deep_b" placeholder="スタッフからの不満・苦情・意見など自由に教えてください…"></textarea>
+    </div>
+    <div id="deep-c" style="display:none; margin-bottom:16px">
+      <div class="question-label"><span class="q-num">追加</span>問題の頻度・影響について</div>
+      <textarea name="deep_c" placeholder="月に○回発生した、○時間ロスした、ヒヤリハットが○件あった など…"></textarea>
+    </div>
+    <div id="deep-d" style="display:none; margin-bottom:16px">
+      <div class="question-label"><span class="q-num">追加</span>もし解決されていたら</div>
+      <textarea name="deep_d" placeholder="解決されていたとしたら、乗り換えを検討しなかったと思うか など…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q10</span>挙げていただいた中で最も大きかった離脱理由はどれですか？<span class="required-badge">必須</span></div>
+      <div class="choice-group" id="q10-group">
+        <label class="choice-label" onclick="selectRadio(this,'q10')"><input type="radio" name="q10" value="機能不足・未対応機能"><div class="choice-check"></div>機能不足・未対応機能</label>
+        <label class="choice-label" onclick="selectRadio(this,'q10')"><input type="radio" name="q10" value="操作性・使いにくさ"><div class="choice-check"></div>操作性・使いにくさ</label>
+        <label class="choice-label" onclick="selectRadio(this,'q10')"><input type="radio" name="q10" value="価格・コストパフォーマンス"><div class="choice-check"></div>価格・コストパフォーマンス</label>
+        <label class="choice-label" onclick="selectRadio(this,'q10')"><input type="radio" name="q10" value="サポート対応の質"><div class="choice-check"></div>サポート対応の質</label>
+        <label class="choice-label" onclick="selectRadio(this,'q10')"><input type="radio" name="q10" value="法改正・制度変更への対応速度"><div class="choice-check"></div>法改正・制度変更への対応速度</label>
+        <label class="choice-label" onclick="selectRadio(this,'q10')"><input type="radio" name="q10" value="動作速度・安定性"><div class="choice-check"></div>動作速度・安定性</label>
+        <label class="choice-label" onclick="selectRadio(this,'q10')"><input type="radio" name="q10" value="その他"><div class="choice-check"></div>その他</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q11</span>もし1つだけ改善できるとしたら、何を最優先に望みますか？<span class="optional-badge">任意</span></div>
+      <textarea name="q11" placeholder="一番改善してほしいことを一言で教えてください…"></textarea>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goTo(2)">← 戻る</button>
+      <button class="btn-next" onclick="goTo(4)">次へ <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: 競合評価 ── -->
+  <div class="section-card" id="section-4">
+    <div class="section-header">
+      <div class="section-tag"><span class="section-number">04</span> 競合比較</div>
+      <h2 class="section-title">競合システムの評価</h2>
+      <p class="section-desc">新しくご導入されたシステムについてお聞かせください。</p>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q12</span>競合システムに乗り換えた主な理由は何ですか？（複数選択可）<span class="required-badge">必須</span></div>
+      <div class="choice-group" id="q12-group">
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q12" value="機能が豊富・充実"><div class="choice-check-sq"></div>機能が豊富・充実</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q12" value="操作が簡単・直感的"><div class="choice-check-sq"></div>操作が簡単・直感的</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q12" value="価格が安い"><div class="choice-check-sq"></div>価格が安い</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q12" value="サポートが手厚い"><div class="choice-check-sq"></div>サポートが手厚い</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q12" value="クラウド対応・モバイル対応"><div class="choice-check-sq"></div>クラウド対応・モバイル対応</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q12" value="他社との連携がしやすい"><div class="choice-check-sq"></div>他社との連携がしやすい</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q12" value="評判・口コミが良い"><div class="choice-check-sq"></div>評判・口コミが良い</label>
+        <label class="choice-label" onclick="selectCheckbox(this)"><input type="checkbox" name="q12" value="その他"><div class="choice-check-sq"></div>その他</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q13</span>当社には無くて競合にあった機能・特長は何ですか？<span class="optional-badge">任意</span></div>
+      <textarea name="q13" placeholder="具体的な機能名や特長があれば教えてください…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q14</span>当社の方が優れていると感じた点はありましたか？<span class="optional-badge">任意</span></div>
+      <textarea name="q14" placeholder="当社の強みと感じていた部分や、乗り換えて惜しかった点など…"></textarea>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goTo(3)">← 戻る</button>
+      <button class="btn-next" onclick="goTo(5)">次へ <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: 価格 ── -->
+  <div class="section-card" id="section-5">
+    <div class="section-header">
+      <div class="section-tag"><span class="section-number">05</span> 価格・コスト</div>
+      <h2 class="section-title">価格・コストに関する評価</h2>
+      <p class="section-desc">当社の価格設定についてお聞かせください。</p>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q15</span>当社の価格設定はどのように感じていましたか？<span class="required-badge">必須</span></div>
+      <div class="choice-group" id="q15-group">
+        <label class="choice-label" onclick="selectRadio(this,'q15')"><input type="radio" name="q15" value="高すぎる（価値に見合わない）"><div class="choice-check"></div>高すぎる（価値に見合わない）</label>
+        <label class="choice-label" onclick="selectRadio(this,'q15')"><input type="radio" name="q15" value="やや高い"><div class="choice-check"></div>やや高い</label>
+        <label class="choice-label" onclick="selectRadio(this,'q15')"><input type="radio" name="q15" value="適正だと感じていた"><div class="choice-check"></div>適正だと感じていた</label>
+        <label class="choice-label" onclick="selectRadio(this,'q15')"><input type="radio" name="q15" value="安いと感じていた"><div class="choice-check"></div>安いと感じていた</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q16</span>価格以外の価値（機能・サポート・使いやすさ）の総合満足度は？<span class="required-badge">必須</span></div>
+      <div class="scale-wrap">
+        <div class="scale-track" id="scale-q16">
+          <button class="scale-btn" onclick="setScale('q16',1,this)">1</button>
+          <button class="scale-btn" onclick="setScale('q16',2,this)">2</button>
+          <button class="scale-btn" onclick="setScale('q16',3,this)">3</button>
+          <button class="scale-btn" onclick="setScale('q16',4,this)">4</button>
+          <button class="scale-btn" onclick="setScale('q16',5,this)">5</button>
+        </div>
+        <div class="scale-labels"><span>非常に不満</span><span>非常に満足</span></div>
+      </div>
+      <input type="hidden" name="q16" id="q16-val">
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q17</span>価格について補足・ご意見があればお聞かせください。<span class="optional-badge">任意</span></div>
+      <textarea name="q17" placeholder="例：〇〇機能があればこの価格でも続けたかった など…"></textarea>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goTo(4)">← 戻る</button>
+      <button class="btn-next" onclick="goTo(6)">次へ <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6: サポート ── -->
+  <div class="section-card" id="section-6">
+    <div class="section-header">
+      <div class="section-tag"><span class="section-number">06</span> サポート評価</div>
+      <h2 class="section-title">サポート・運用面の評価</h2>
+      <p class="section-desc">ご利用中のサポートについてお聞かせください。</p>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q18</span>問い合わせ対応のスピードはいかがでしたか？<span class="required-badge">必須</span></div>
+      <div class="scale-wrap">
+        <div class="scale-track" id="scale-q18">
+          <button class="scale-btn" onclick="setScale('q18',1,this)">1</button>
+          <button class="scale-btn" onclick="setScale('q18',2,this)">2</button>
+          <button class="scale-btn" onclick="setScale('q18',3,this)">3</button>
+          <button class="scale-btn" onclick="setScale('q18',4,this)">4</button>
+          <button class="scale-btn" onclick="setScale('q18',5,this)">5</button>
+        </div>
+        <div class="scale-labels"><span>非常に遅い</span><span>非常に速い</span></div>
+      </div>
+      <input type="hidden" name="q18" id="q18-val">
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q19</span>問い合わせ対応の質はいかがでしたか？<span class="required-badge">必須</span></div>
+      <div class="scale-wrap">
+        <div class="scale-track" id="scale-q19">
+          <button class="scale-btn" onclick="setScale('q19',1,this)">1</button>
+          <button class="scale-btn" onclick="setScale('q19',2,this)">2</button>
+          <button class="scale-btn" onclick="setScale('q19',3,this)">3</button>
+          <button class="scale-btn" onclick="setScale('q19',4,this)">4</button>
+          <button class="scale-btn" onclick="setScale('q19',5,this)">5</button>
+        </div>
+        <div class="scale-labels"><span>非常に不満</span><span>非常に満足</span></div>
+      </div>
+      <input type="hidden" name="q19" id="q19-val">
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q20</span>マニュアルや研修は分かりやすかったですか？<span class="optional-badge">任意</span></div>
+      <div class="choice-group" id="q20-group">
+        <label class="choice-label" onclick="selectRadio(this,'q20')"><input type="radio" name="q20" value="とても分かりやすかった"><div class="choice-check"></div>とても分かりやすかった</label>
+        <label class="choice-label" onclick="selectRadio(this,'q20')"><input type="radio" name="q20" value="まあまあ分かりやすかった"><div class="choice-check"></div>まあまあ分かりやすかった</label>
+        <label class="choice-label" onclick="selectRadio(this,'q20')"><input type="radio" name="q20" value="やや分かりにくかった"><div class="choice-check"></div>やや分かりにくかった</label>
+        <label class="choice-label" onclick="selectRadio(this,'q20')"><input type="radio" name="q20" value="非常に分かりにくかった"><div class="choice-check"></div>非常に分かりにくかった</label>
+        <label class="choice-label" onclick="selectRadio(this,'q20')"><input type="radio" name="q20" value="ほとんど使わなかった"><div class="choice-check"></div>ほとんど使わなかった</label>
+      </div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q21</span>サポート・担当者への補足コメント<span class="optional-badge">任意</span></div>
+      <textarea name="q21" placeholder="担当者との関係、トラブル時の対応、改善してほしかった点など…"></textarea>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goTo(5)">← 戻る</button>
+      <button class="btn-next" onclick="goTo(7)">次へ <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 7: 未来・要望 ── -->
+  <div class="section-card" id="section-7">
+    <div class="section-header">
+      <div class="section-tag"><span class="section-number">07</span> 未来志向</div>
+      <h2 class="section-title">今後の期待・要望</h2>
+      <p class="section-desc">業界の変化を見据えたご意見をお聞かせください。</p>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q22</span>今後の福祉業界の変化の中で、システムに必要になる機能は何だと思いますか？<span class="optional-badge">任意</span></div>
+      <textarea name="q22" placeholder="例：AI活用による記録自動化、他社連携、データ分析機能、モバイル対応 など…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q23</span>理想の業務フローはどのようなものですか？<span class="optional-badge">任意</span></div>
+      <textarea name="q23" placeholder="どんなシステム・環境があれば業務が理想的になるか、自由にお聞かせください…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q24</span>当社への再契約を検討していただける可能性はありますか？<span class="required-badge">必須</span></div>
+      <div class="choice-group" id="q24-group">
+        <label class="choice-label" onclick="selectRadio(this,'q24')"><input type="radio" name="q24" value="ある（条件次第で検討できる）"><div class="choice-check"></div>ある（条件次第で検討できる）</label>
+        <label class="choice-label" onclick="selectRadio(this,'q24')"><input type="radio" name="q24" value="わからない"><div class="choice-check"></div>わからない</label>
+        <label class="choice-label" onclick="selectRadio(this,'q24')"><input type="radio" name="q24" value="現時点では難しい"><div class="choice-check"></div>現時点では難しい</label>
+        <label class="choice-label" onclick="selectRadio(this,'q24')"><input type="radio" name="q24" value="戻ることはない"><div class="choice-check"></div>戻ることはない</label>
+      </div>
+    </div>
+
+    <div id="reconsider-block" style="display:none">
+      <div class="question-block">
+        <div class="question-label"><span class="q-num">Q24-1</span>再契約を検討するとしたら、どのような改善が必要ですか？<span class="optional-badge">任意</span></div>
+        <textarea name="q24_1" placeholder="再契約の条件・改善点を自由にお書きください…"></textarea>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goTo(6)">← 戻る</button>
+      <button class="btn-next" onclick="goTo(8)">次へ <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 8: 自由回答 ── -->
+  <div class="section-card" id="section-8">
+    <div class="section-header">
+      <div class="section-tag"><span class="section-number">08</span> 自由回答</div>
+      <h2 class="section-title">最後に、率直なご意見をどうぞ</h2>
+      <p class="section-desc">言いにくかったことも含め、なんでも構いません。改善のために真剣に活かします。</p>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q25</span>率直にお聞きしたいのですが、他に気になっていた点はありますか？<span class="optional-badge">任意</span></div>
+      <div class="question-hint">言いにくいことでも構いません。改善のために教えていただけると幸いです。</div>
+      <textarea name="q25" style="min-height:120px" placeholder="どんな小さなことでも構いません。思っていたことをそのままお聞かせください…"></textarea>
+    </div>
+
+    <div class="question-block">
+      <div class="question-label"><span class="q-num">Q26</span>当社スタッフへのメッセージがあればご自由にどうぞ<span class="optional-badge">任意</span></div>
+      <textarea name="q26" placeholder="感謝・要望・激励など、なんでも構いません…"></textarea>
+    </div>
+
+    <div style="background:var(--paper-warm); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; margin-bottom:24px; font-size:13px; color:var(--ink-light); line-height:1.8;">
+      <strong style="color:var(--ink); display:block; margin-bottom:8px;">📬 ご回答の取り扱いについて</strong>
+      いただいた内容は、今後のサービス改善のみに活用いたします。第三者への提供・営業目的での利用は一切行いません。
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goTo(7)">← 戻る</button>
+      <button class="btn-next btn-submit" onclick="submitInterview()">
+        ✓ 送信して完了する
+      </button>
+    </div>
+  </div>
+
+  <!-- ── THANK YOU ── -->
+  <div id="thankyou-screen">
+    <div class="ty-icon">✓</div>
+    <h2 class="ty-title">ヒアリングにご協力<br>いただきありがとうございました。</h2>
+    <p class="ty-message">いただいたご意見は、今後のサービス改善に真剣に活かしてまいります。<br>貴重なお時間をいただき、誠にありがとうございました。</p>
+    <div class="ty-summary" id="ty-summary">
+      <h4>📊 ご回答サマリー</h4>
+      <div id="summary-entries"></div>
+    </div>
+    <p style="font-size:12px; color:var(--ink-muted); margin-top:16px;">ND Software株式会社　顧客成功チーム</p>
+  </div>
+
+</div>
+
+<script>
+  const TOTAL = 8;
+  let currentSection = 0;
+  const scaleValues = {};
+
+  function startInterview() {
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('progress-area').style.display = 'block';
+    buildStepDots();
+    goTo(1);
+  }
+
+  function buildStepDots() {
+    const nav = document.getElementById('steps-nav');
+    nav.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const d = document.createElement('div');
+      d.className = 'step-dot';
+      d.id = 'dot-' + i;
+      d.title = 'セクション ' + i;
+      d.onclick = () => { if (i < currentSection || i === currentSection) {} };
+      nav.appendChild(d);
+    }
+  }
+
+  function goTo(n) {
+    if (currentSection > 0) {
+      const prev = document.getElementById('section-' + currentSection);
+      if (prev) { prev.classList.remove('active'); }
+      document.getElementById('dot-' + currentSection).classList.remove('active');
+      document.getElementById('dot-' + currentSection).classList.add('done');
+    }
+    currentSection = n;
+    const cur = document.getElementById('section-' + n);
+    if (cur) {
+      cur.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    document.getElementById('dot-' + n).classList.add('active');
+    document.getElementById('dot-' + n).classList.remove('done');
+    const pct = Math.round(((n - 1) / TOTAL) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('pct-label').textContent = pct + '%';
+    document.getElementById('section-label').textContent = 'セクション ' + n + ' / ' + TOTAL;
+  }
+
+  function selectRadio(el, name) {
+    document.querySelectorAll(`#${name}-group .choice-label`).forEach(l => l.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+    if (name === 'q24') {
+      const val = el.querySelector('input').value;
+      document.getElementById('reconsider-block').style.display =
+        (val === 'ある（条件次第で検討できる）' || val === 'わからない') ? 'block' : 'none';
+    }
+  }
+
+  function selectCheckbox(el) {
+    el.classList.toggle('selected');
+    el.querySelector('input').checked = el.classList.contains('selected');
+  }
+
+  function setScale(name, val, btn) {
+    const track = document.getElementById('scale-' + name);
+    track.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(name + '-val').value = val;
+    scaleValues[name] = val;
+  }
+
+  function openDeep(id) {
+    const el = document.getElementById(id);
+    if (el.style.display === 'none') {
+      el.style.display = 'block';
+      el.style.animation = 'fadeInUp 0.3s ease';
+    }
+  }
+
+  function submitInterview() {
+    const data = gatherData();
+    const entries = document.getElementById('summary-entries');
+    entries.innerHTML = '';
+    const summaryMap = {
+      q1: '利用者数', q2: '職員数', q5: '検討開始時期',
+      q6: '検討のきっかけ', q9: '主な不満点', q10: '最大の離脱理由',
+      q15: '価格評価', q16: '総合満足度', q24: '再契約可能性'
+    };
+    Object.entries(summaryMap).forEach(([key, label]) => {
+      if (data[key]) {
+        const d = document.createElement('div');
+        d.className = 'ty-entry';
+        d.innerHTML = `<span class="ty-entry-label">${label}</span><span class="ty-entry-value">${String(data[key]).slice(0, 60)}${String(data[key]).length > 60 ? '…' : ''}</span>`;
+        entries.appendChild(d);
+      }
+    });
+
+    document.getElementById('section-' + currentSection).classList.remove('active');
+    document.getElementById('progress-area').style.display = 'none';
+    document.getElementById('thankyou-screen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('ヒアリングデータ:', JSON.stringify(data, null, 2));
+  }
+
+  function gatherData() {
+    const data = {};
+    document.querySelectorAll('input[name], textarea[name], select[name]').forEach(el => {
+      if (!el.name) return;
+      if (el.type === 'radio' && !el.checked) return;
+      if (el.type === 'checkbox' && !el.checked) return;
+      if (el.type === 'hidden' && !el.value) return;
+      if (el.tagName === 'TEXTAREA' && !el.value.trim()) return;
+      if (data[el.name]) {
+        data[el.name] = data[el.name] + ', ' + el.value;
+      } else {
+        data[el.name] = el.value;
+      }
+    });
+    return data;
+  }
+</script>
+</body>
+</html>
