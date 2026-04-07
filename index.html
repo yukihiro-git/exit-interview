@@ -1160,8 +1160,16 @@
   }
 
   function selectCheckbox(el) {
-    el.classList.toggle('selected');
-    el.querySelector('input').checked = el.classList.contains('selected');
+    const input = el.querySelector('input');
+    // labelクリック時にブラウザがcheckboxをtoggleした後に呼ばれるため、
+    // inputのchecked状態を正とみなしてselectedクラスを合わせる
+    setTimeout(() => {
+      if (input.checked) {
+        el.classList.add('selected');
+      } else {
+        el.classList.remove('selected');
+      }
+    }, 0);
   }
 
   function setScale(name, val, btn) {
